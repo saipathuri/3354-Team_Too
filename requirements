@@ -13,7 +13,7 @@ Functional Requirements
    2.1 The app shall allow users to send an SMS to a contact.
    2.2 The app shall allow users to make a phone call to a contact.
  3. The app shall allow users persistent access to contacts.
-   3.1 The app should store contacts data on close.
-   3.2 The app should store contacts on restart.
-   3.3 The app should store contacts on unexpected close.
+   3.1 The app shall store contacts data on close.
+   3.2 The app shall store contacts on restart.
+   3.3 The app shall store contacts on unexpected close.
 Use Case Diagram
