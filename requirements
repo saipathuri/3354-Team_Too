@@ -2,7 +2,7 @@ Software Requirements Specifications (SRS) for Contact Manager App
 
 Definitions, Acronyms, and Abbrevriations
 Contact Manager     |       The name of the app.
-SMS                 |       Short Method Service 
+SMS                 |       Short Message Service 
 
 Functional Requirements
  1. The app shall allow users to manage contacts.
