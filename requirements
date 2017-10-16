@@ -1,35 +1,37 @@
-Software Requirements Specifications (SRS) for Contact Manager App
-
-Definitions, Acronyms, and Abbrevriations
-Contact Manager     |       The name of the app.
-SMS                 |       Short Message Service 
-Add/Delete          |       Adding or removing a contact from the application.
-Search              |       Look up a contact in the application by contact name.
-
+Definitions, Acronyms, and Abbreviations
+Contact Manager 	|   	The name of the app.
+SMS             	|   	Short Message Service
+Add/Delete      	|   	Adding or removing a contact from the application.
+Search          	|   	Look up a contact in the application by contact name.
+ 
 Functional Requirements
  1. The app shall allow users to manage contacts.
-   1.1 The app shall allow users to add a contact.
-   1.2 The app shall allow users to view a contact. 
-   1.3 The app shall allow users to edit a contact.
-   1.4 The app shall allow users to delete a contact.
-   1.5 The app shall allow users to search for specific contacts.
-   1.6 The app shall allow users to sort contacts by name.
-   1.7 The app shall allow users to blacklist a contact.
+   1.1 The app shall allow users to add a contact through through the contact manager with fields for name, number, email(s), and photo.
+   1.2 The app shall allow users to view a contact’s information through the contact manager, including name, number, email(s), and photo. 
+   1.3 The app shall allow users to edit a contact’s information through the contact manager, including their name, number, email(s), and photo. 
+   1.4 The app shall allow users to delete a contact through the contact manager. 
+   1.5 The app shall allow users to search for specific contacts through the contact manager. 
+   1.6 The app shall allow users to sort contacts by name through the contact manager.
+   1.7 The app shall allow users to blacklist a contact through the contact manager.
    1.8 The app shall allow users to add a photo for a contact.
    1.9 The app shall allow users to add multiple numbers for a contact.
  2. The app shall allow users to organize contacts in groups.
-   2.1 The app shall allow users to create groups.
-   2.2 The app shall allow users to add contacts to groups. 
-   2.3 The app shall allow users to remove contacts from groups.
-   2.4 The app shall allow users to sort contacts by groups.
+   2.1 The app shall allow users to create groups through the group manager.
+   2.2 The app shall allow users to add contacts to groups through the group manager.
+   2.3 The app shall allow users to remove contacts from groups through the group manager.
+   2.4 The app shall allow users to sort contacts by groups through the group manager.
  3. The app shall allow users to communicate with contacts from contact view.
-   3.1 The app shall allow users to send an SMS to a contact.
-   3.2 The app shall allow users to make a phone call to a contact.
-   3.3 The app shall provide a call log for calls made and received by different contacts.
- 4. The app shall allow users persistent access to contacts.
-   4.1 The app shall store contacts data on close.
+   3.1 The app shall allow users to send an SMS to a contact through the communications manager.
+   3.2 The app shall allow users to make a phone call to a contact through the communications manager.
+   3.3 The app shall provide a call log for calls made and received by different contacts through the communications database. 
+4. The app shall allow users persistent access to contacts.
+   4.1 The app shall store contacts data on close through the database managers.
    4.2 The app shall store contacts on restart.
-   4.3 The app shall store contacts on unexpected close.  
-   
+   4.3 The app shall store contacts on unexpected close.
+5. The app shall display contact information.
+   5.1 The app shall list contacts in alphabetical order by last name.
+   5.2 The app shall allow zooming in/out. 
+
+
 Use Case Diagram
 Located in all_diagrams.mdj and use_case_diagram.PNG
