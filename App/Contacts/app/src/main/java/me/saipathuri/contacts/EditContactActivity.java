@@ -37,9 +37,19 @@ public class EditContactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_contact);
 
+        mToolbar = (Toolbar) findViewById(R.id.tb_edit_contact);
+        setSupportActionBar(mToolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+
         mContactsBox = ((ContactsApp) getApplication()).getBoxStore().boxFor(Contact.class);
         mContact = new Contact();
 
+        //Get all views in layout
         mContactImageButton = (ImageButton) findViewById(R.id.ib_edit_contact);
         mContactFirstName = (EditText) findViewById(R.id.et_edit_contact_first_name);
         mContactLastName = (EditText) findViewById(R.id.et_edit_contact_last_name);
@@ -48,6 +58,8 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber2 = (EditText) findViewById(R.id.et_edit_contact_phone_number_2);
         mContactPhoneNumber3 = (EditText) findViewById(R.id.et_edit_contact_phone_number_3);
         mDeleteButton = (Button) findViewById(R.id.btn_edit_contact_delete);
+
+        //pressing delete will delete contact from the DB and go to contacts list
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,8 +67,6 @@ public class EditContactActivity extends AppCompatActivity {
                 leaveActivity();
             }
         });
-        mToolbar = (Toolbar) findViewById(R.id.tb_edit_contact);
-        setSupportActionBar(mToolbar);
 
         Intent intent = getIntent();
         if(intent != null && intent.hasExtra(Constants.CONTACT_ID_EXTRA_KEY)){
@@ -67,13 +77,9 @@ public class EditContactActivity extends AppCompatActivity {
         if(mId == 0){
             mDeleteButton.setEnabled(false);
             mDeleteButton.setVisibility(View.INVISIBLE);
+            ab.setTitle("Edit Contact");
         }
 
-        // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
-
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     // called if existing contact is being edited. This means mId is not null.
@@ -85,6 +91,7 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber1.setText(mContact.getPhoneNumber1());
         mContactPhoneNumber2.setText(mContact.getPhoneNumber2());
         mContactPhoneNumber3.setText(mContact.getPhoneNumber3());
+        mToolbar.setTitle(mContact.getFirstName() + " " + mContact.getLastName());
     }
 
 

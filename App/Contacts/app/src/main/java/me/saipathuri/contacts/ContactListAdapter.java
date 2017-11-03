@@ -43,7 +43,7 @@ class ContactListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final Contact contact = contacts.get(position);
 
-        String name = contact.getFirstName();
+        String name = contact.getFirstName() + " " + contact.getLastName();
         String phoneNumber = contact.getPhoneNumber1();
         String emailAddress = contact.getEmailAddress();
         String photoPath = contact.getPhotoPath();
