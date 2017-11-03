@@ -1,7 +1,5 @@
 package me.saipathuri.contacts;
 
-import java.util.ArrayList;
-
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
@@ -14,7 +12,8 @@ public class Contact {
 
     @Id
     long id;
-    String name;
+    String firstName;
+    String lastName;
 
     //three different phone number strings because ObjectBox doesn't support lists
     String phoneNumber1;
@@ -23,14 +22,19 @@ public class Contact {
     String emailAddress;
     String photoPath;
 
-    public Contact(long id, String name, String phoneNumber1, String phoneNumber2, String phoneNumber3, String emailAddress, String photoPath) {
+    public Contact(long id, String firstName, String lastName, String phoneNumber1, String phoneNumber2, String phoneNumber3, String emailAddress, String photoPath) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.phoneNumber1 = phoneNumber1;
         this.phoneNumber2 = phoneNumber2;
         this.phoneNumber3 = phoneNumber3;
         this.emailAddress = emailAddress;
         this.photoPath = photoPath;
+    }
+
+    public Contact() {
+
     }
 
     public String getPhoneNumber1() {
@@ -65,12 +69,20 @@ public class Contact {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmailAddress() {
