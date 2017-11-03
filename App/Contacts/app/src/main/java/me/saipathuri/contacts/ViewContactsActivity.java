@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -25,11 +26,15 @@ public class ViewContactsActivity extends AppCompatActivity {
     private List<Contact> mContacts;
     private Box<Contact> mContactsBox;
     private FloatingActionButton mAddContactFloatingActionButton;
+    private Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_contacts);
 
+        mToolbar = (Toolbar) findViewById(R.id.tb_view_contacts);
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitle("Contacts");
         // get stored contacts from objectbox
         mContactsBox = ((ContactsApp) getApplication()).getBoxStore().boxFor(Contact.class);
         mContacts = mContactsBox.getAll();
