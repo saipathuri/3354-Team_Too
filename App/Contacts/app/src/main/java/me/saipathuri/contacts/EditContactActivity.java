@@ -31,6 +31,7 @@ public class EditContactActivity extends AppCompatActivity {
     private Contact mContact;
     private Button mDeleteButton;
     private Box<Contact> mContactsBox;
+    private boolean isInEditMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +76,17 @@ public class EditContactActivity extends AppCompatActivity {
             fillContactInfoToFields();
         }
         if(mId == 0){
-            mDeleteButton.setEnabled(false);
-            mDeleteButton.setVisibility(View.INVISIBLE);
-            ab.setTitle("Edit Contact");
+            hideDeleteButton();
         }
+
+        setViewMode();
 
     }
 
+    private void hideDeleteButton(){
+        mDeleteButton.setEnabled(false);
+        mDeleteButton.setVisibility(View.INVISIBLE);
+    }
     // called if existing contact is being edited. This means mId is not null.
     private void fillContactInfoToFields() {
         mContactImageButton.setImageBitmap(ImageUtils.getBitmapFromPath(this, mContact.getPhotoPath()));
@@ -109,6 +114,13 @@ public class EditContactActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.edit_contact_menu, menu);
+        if(isInEditMode) {
+            menu.findItem(R.id.action_save).setEnabled(true);
+            menu.findItem(R.id.action_edit).setEnabled(false);
+        }else{
+            menu.findItem(R.id.action_save).setEnabled(false);
+            menu.findItem(R.id.action_edit).setEnabled(true);
+        }
         return true;
     }
 
@@ -116,11 +128,19 @@ public class EditContactActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save:
+                isInEditMode = false;
+                setViewMode();
                 saveContact();
+                supportInvalidateOptionsMenu();
                 break;
 
             case android.R.id.home:
                 leaveActivity();
+                break;
+
+            case R.id.action_edit:
+                setEditMode();
+                supportInvalidateOptionsMenu();
                 break;
 
             default:
@@ -136,7 +156,7 @@ public class EditContactActivity extends AppCompatActivity {
                 !mContact.getPhoneNumber1().isEmpty() ||
                 !mContact.getEmailAddress().isEmpty()) {
             mContactsBox.put(mContact);
-            leaveActivity();
+            Toast.makeText(this, "Contact Saved", Toast.LENGTH_SHORT).show();
         } else{
             Toast.makeText(this, "First four fields must be filled", Toast.LENGTH_SHORT).show();
         }
@@ -146,5 +166,35 @@ public class EditContactActivity extends AppCompatActivity {
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
+    }
+
+    private void setViewMode(){
+        mContactImageButton.setClickable(false);
+        mContactFirstName.setEnabled(false);
+        mContactLastName.setEnabled(false);
+        mContactEmailAddress.setEnabled(false);
+        mContactPhoneNumber1.setEnabled(false);
+        mContactPhoneNumber2.setEnabled(false);
+        mContactPhoneNumber3.setEnabled(false);
+        hideDeleteButton();
+    }
+    
+    private void setEditMode(){
+        mContactImageButton.setClickable(true);
+        mContactFirstName.setEnabled(true);
+        mContactFirstName.requestFocus();
+        mContactLastName.setEnabled(true);
+        mContactEmailAddress.setEnabled(true);
+        mContactPhoneNumber1.setEnabled(true);
+        mContactPhoneNumber2.setEnabled(true);
+        mContactPhoneNumber3.setEnabled(true);
+
+        enableDeleteButton();
+        isInEditMode = true;
+    }
+
+    private void enableDeleteButton() {
+        mDeleteButton.setEnabled(true);
+        mDeleteButton.setVisibility(View.VISIBLE);
     }
 }
