@@ -74,12 +74,12 @@ public class EditContactActivity extends AppCompatActivity {
             mId = intent.getLongExtra(Constants.CONTACT_ID_EXTRA_KEY, 0);
             mContact = mContactsBox.get(mId);
             fillContactInfoToFields();
+            setViewMode();
         }
         if(mId == 0){
+            setEditMode();
             hideDeleteButton();
         }
-
-        setViewMode();
 
     }
 
@@ -128,10 +128,11 @@ public class EditContactActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save:
-                isInEditMode = false;
-                setViewMode();
-                saveContact();
-                supportInvalidateOptionsMenu();
+                if(saveContact()){
+                    isInEditMode = false;
+                    setViewMode();
+                    supportInvalidateOptionsMenu();
+                }
                 break;
 
             case android.R.id.home:
@@ -149,16 +150,17 @@ public class EditContactActivity extends AppCompatActivity {
         return true;
     }
 
-    private void saveContact() {
+    private boolean saveContact() {
         readContactInfoFromFields();
-        if(!mContact.getFirstName().isEmpty() ||
-                !mContact.getLastName().isEmpty() ||
-                !mContact.getPhoneNumber1().isEmpty() ||
-                !mContact.getEmailAddress().isEmpty()) {
+        if(!mContact.getFirstName().isEmpty() &&
+                !mContact.getLastName().isEmpty() &&
+                !mContact.getPhoneNumber1().isEmpty()) {
             mContactsBox.put(mContact);
             Toast.makeText(this, "Contact Saved", Toast.LENGTH_SHORT).show();
+            return true;
         } else{
             Toast.makeText(this, "First four fields must be filled", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 
