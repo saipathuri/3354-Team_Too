@@ -2,6 +2,8 @@ package me.saipathuri.contacts;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,6 +35,10 @@ public class EditContactActivity extends AppCompatActivity {
     private Button mDeleteButton;
     private Box<Contact> mContactsBox;
     private boolean isInEditMode = false;
+    private CoordinatorLayout editContactCoordinatorLayout;
+    private CoordinatorLayout viewContactsCoordinatorLayout;
+    private Snackbar requiredInfoSnackbar;
+    private Snackbar successSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,15 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber2 = (EditText) findViewById(R.id.et_edit_contact_phone_number_2);
         mContactPhoneNumber3 = (EditText) findViewById(R.id.et_edit_contact_phone_number_3);
         mDeleteButton = (Button) findViewById(R.id.btn_edit_contact_delete);
+        editContactCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_edit_contact);
+        viewContactsCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_view_contacts);
+
+        //Set snackbar info
+        requiredInfoSnackbar = Snackbar.make(editContactCoordinatorLayout, Constants.REQUIRED_INFO_MISSING_MSG,
+                Snackbar.LENGTH_LONG);
+
+        successSnackbar = Snackbar.make(editContactCoordinatorLayout, Constants.CONTACT_EDIT_SUCCESS,
+                Snackbar.LENGTH_SHORT);
 
         //pressing delete will delete contact from the DB and go to contacts list
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +144,7 @@ public class EditContactActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save:
+                hideSoftKeyboard(this);
                 if(saveContact()){
                     isInEditMode = false;
                     setViewMode();
@@ -156,10 +173,10 @@ public class EditContactActivity extends AppCompatActivity {
                 !mContact.getLastName().isEmpty() &&
                 !mContact.getPhoneNumber1().isEmpty()) {
             mContactsBox.put(mContact);
-            Toast.makeText(this, "Contact Saved", Toast.LENGTH_SHORT).show();
+            successSnackbar.show();
             return true;
         } else{
-            Toast.makeText(this, "First four fields must be filled", Toast.LENGTH_SHORT).show();
+            requiredInfoSnackbar.show();
             return false;
         }
     }
@@ -191,12 +208,20 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber2.setEnabled(true);
         mContactPhoneNumber3.setEnabled(true);
 
-        enableDeleteButton();
+        showDeleteButton();
         isInEditMode = true;
     }
 
-    private void enableDeleteButton() {
+    private void showDeleteButton() {
         mDeleteButton.setEnabled(true);
         mDeleteButton.setVisibility(View.VISIBLE);
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
     }
 }

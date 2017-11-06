@@ -3,6 +3,8 @@
     package="me.saipathuri.contacts">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name=".ContactsApp"
@@ -14,7 +16,8 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".MainActivity">
         </activity>
-        <activity android:name=".ViewContactsActivity">
+        <activity android:name=".ViewContactsActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
