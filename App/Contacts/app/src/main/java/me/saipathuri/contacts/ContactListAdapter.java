@@ -97,7 +97,7 @@ class ContactListAdapter extends RecyclerView.Adapter {
         }
 
         void setImage(String photoPath){
-            Bitmap bitmap = ImageUtils.getBitmapFromPath(itemView.getContext(), photoPath);
+            Bitmap bitmap = ImageUtils.getBitmapFromPath(itemView.getContext(), mContactImageButton,photoPath);
             mContactImageButton.setImageBitmap(bitmap);
         }
 
