@@ -46,6 +46,7 @@ public class EditContactActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Contact mContact;
     private Button mDeleteButton;
+    private Button mDoneButton;
     private Box<Contact> mContactsBox;
     private boolean isInEditMode = false;
     private CoordinatorLayout editContactCoordinatorLayout;
@@ -86,6 +87,8 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber2 = (EditText) findViewById(R.id.et_edit_contact_phone_number_2);
         mContactPhoneNumber3 = (EditText) findViewById(R.id.et_edit_contact_phone_number_3);
         mDeleteButton = (Button) findViewById(R.id.btn_edit_contact_delete);
+        mDoneButton = (Button) findViewById(R.id.btn_done_editing);
+
         editContactCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_edit_contact);
         viewContactsCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_view_contacts);
 
@@ -109,6 +112,13 @@ public class EditContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mContactsBox.remove(mContact);
+                leaveActivity();
+            }
+        });
+        //pressing the done button will return to the contacts list
+        mDoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 leaveActivity();
             }
         });

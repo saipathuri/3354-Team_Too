@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout_view_contacts"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_view_contacts">
+    android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,9 +15,6 @@
             android:id="@+id/tb_view_contacts"
             android:layout_width="fill_parent"
             android:layout_height="56dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="0dp"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
@@ -51,14 +47,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:src="@drawable/ic_add_white_24dp"
             app:elevation="6dp"
-            app:pressedTranslationZ="12dp"
             app:layout_constraintBottom_toBottomOf="@+id/rv_contacts_list"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="@+id/rv_contacts_list"
-            android:layout_marginEnd="8dp" />
+            app:pressedTranslationZ="12dp" />
 
     </android.support.constraint.ConstraintLayout>
 
