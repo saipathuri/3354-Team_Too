@@ -209,14 +209,8 @@ public class EditContactActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             mContact.setPhotoPath(temp_photo_path);
-            if(data != null) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                mContactImageButton.setImageBitmap(imageBitmap);
-            } else{
-                Bitmap imageBitmap = ImageUtils.getBitmapFromPath(this, mContactImageButton, mContact.getPhotoPath());
-                mContactImageButton.setImageBitmap(imageBitmap);
-            }
+            Bitmap imageBitmap = ImageUtils.getBitmapFromPath(this, mContactImageButton, mContact.getPhotoPath());
+            mContactImageButton.setImageBitmap(imageBitmap);
         }
     }
 
