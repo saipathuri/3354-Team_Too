@@ -23,7 +23,7 @@ public class ViewContactsActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ContactListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private List<Contact> mContacts;
+    private ArrayList<Contact> mContacts;
     private Box<Contact> mContactsBox;
     private FloatingActionButton mAddContactFloatingActionButton;
     private Toolbar mToolbar;
@@ -37,7 +37,7 @@ public class ViewContactsActivity extends AppCompatActivity {
         mToolbar.setTitle("Contacts");
         // get stored contacts from objectbox
         mContactsBox = ((ContactsApp) getApplication()).getBoxStore().boxFor(Contact.class);
-        mContacts = mContactsBox.getAll();
+        mContacts = new ArrayList<>(mContactsBox.getAll());
 
         if(mContacts.size() == 0){
             Toast.makeText(this, "No contacts saved. Add Some!", Toast.LENGTH_SHORT).show();
@@ -71,7 +71,7 @@ public class ViewContactsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
-                mContacts = mContactsBox.getAll();
+                mContacts = new ArrayList<>(mContactsBox.getAll());
                 mAdapter.notifyDataSetChanged();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -84,7 +84,7 @@ public class ViewContactsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        mContacts = mContactsBox.getAll();
+        mContacts = new ArrayList<>(mContactsBox.getAll());
         mAdapter.updateContactsList(mContacts);
     }
 }

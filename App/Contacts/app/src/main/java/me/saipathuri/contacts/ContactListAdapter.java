@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.saipathuri.contacts.utils.ImageUtils;
@@ -18,10 +19,10 @@ import me.saipathuri.contacts.utils.ImageUtils;
  */
 
 class ContactListAdapter extends RecyclerView.Adapter {
-    private List<Contact> contacts;
+    private ArrayList<Contact> contacts;
 
 
-    ContactListAdapter(List<Contact> contacts) {
+    ContactListAdapter(ArrayList<Contact> contacts) {
         this.contacts = contacts;
     }
 
