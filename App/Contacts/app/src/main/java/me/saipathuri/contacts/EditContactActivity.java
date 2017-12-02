@@ -1,24 +1,40 @@
 package me.saipathuri.contacts;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import io.objectbox.Box;
 import me.saipathuri.contacts.utils.ImageUtils;
 
 public class EditContactActivity extends AppCompatActivity {
+    private final String TAG = getClass().getSimpleName();
     private long mId;
     private ImageButton mContactImageButton;
     private EditText mContactFirstName;
@@ -30,8 +46,20 @@ public class EditContactActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Contact mContact;
     private Button mDeleteButton;
+    private Button mDoneButton;
     private Box<Contact> mContactsBox;
     private boolean isInEditMode = false;
+    private CoordinatorLayout editContactCoordinatorLayout;
+    private CoordinatorLayout viewContactsCoordinatorLayout;
+    private Snackbar requiredInfoSnackbar;
+    private Snackbar successSnackbar;
+
+    //for taking picture
+    static final int REQUEST_TAKE_PHOTO = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    //this is used in case the user opens camera, but doesn't take a new picture
+    private String temp_photo_path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +87,38 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber2 = (EditText) findViewById(R.id.et_edit_contact_phone_number_2);
         mContactPhoneNumber3 = (EditText) findViewById(R.id.et_edit_contact_phone_number_3);
         mDeleteButton = (Button) findViewById(R.id.btn_edit_contact_delete);
+        mDoneButton = (Button) findViewById(R.id.btn_done_editing);
 
+        editContactCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_edit_contact);
+        viewContactsCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_view_contacts);
+
+        //Set snackbar info
+        requiredInfoSnackbar = Snackbar.make(editContactCoordinatorLayout, Constants.REQUIRED_INFO_MISSING_MSG,
+                Snackbar.LENGTH_LONG);
+
+        successSnackbar = Snackbar.make(editContactCoordinatorLayout, Constants.CONTACT_EDIT_SUCCESS,
+                Snackbar.LENGTH_SHORT);
+
+
+        //set photo button onClick
+        mContactImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePicture();
+            }
+        });
         //pressing delete will delete contact from the DB and go to contacts list
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mContactsBox.remove(mContact);
+                leaveActivity();
+            }
+        });
+        //pressing the done button will return to the contacts list
+        mDoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 leaveActivity();
             }
         });
@@ -74,12 +128,12 @@ public class EditContactActivity extends AppCompatActivity {
             mId = intent.getLongExtra(Constants.CONTACT_ID_EXTRA_KEY, 0);
             mContact = mContactsBox.get(mId);
             fillContactInfoToFields();
+            setViewMode();
         }
         if(mId == 0){
+            setEditMode();
             hideDeleteButton();
         }
-
-        setViewMode();
 
     }
 
@@ -89,7 +143,7 @@ public class EditContactActivity extends AppCompatActivity {
     }
     // called if existing contact is being edited. This means mId is not null.
     private void fillContactInfoToFields() {
-        mContactImageButton.setImageBitmap(ImageUtils.getBitmapFromPath(this, mContact.getPhotoPath()));
+        mContactImageButton.setImageBitmap(ImageUtils.getBitmapFromPath(this, mContactImageButton, mContact.getPhotoPath()));
         mContactFirstName.setText(mContact.getFirstName());
         mContactLastName.setText(mContact.getLastName());
         mContactEmailAddress.setText(mContact.getEmailAddress());
@@ -128,10 +182,12 @@ public class EditContactActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save:
-                isInEditMode = false;
-                setViewMode();
-                saveContact();
-                supportInvalidateOptionsMenu();
+                hideSoftKeyboard(this);
+                if(saveContact()){
+                    isInEditMode = false;
+                    setViewMode();
+                    supportInvalidateOptionsMenu();
+                }
                 break;
 
             case android.R.id.home:
@@ -149,16 +205,26 @@ public class EditContactActivity extends AppCompatActivity {
         return true;
     }
 
-    private void saveContact() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            mContact.setPhotoPath(temp_photo_path);
+            Bitmap imageBitmap = ImageUtils.getBitmapFromPath(this, mContactImageButton, mContact.getPhotoPath());
+            mContactImageButton.setImageBitmap(imageBitmap);
+        }
+    }
+
+    private boolean saveContact() {
         readContactInfoFromFields();
-        if(!mContact.getFirstName().isEmpty() ||
-                !mContact.getLastName().isEmpty() ||
-                !mContact.getPhoneNumber1().isEmpty() ||
-                !mContact.getEmailAddress().isEmpty()) {
+        if(!mContact.getFirstName().isEmpty() &&
+                !mContact.getLastName().isEmpty() &&
+                !mContact.getPhoneNumber1().isEmpty()) {
             mContactsBox.put(mContact);
-            Toast.makeText(this, "Contact Saved", Toast.LENGTH_SHORT).show();
+            successSnackbar.show();
+            return true;
         } else{
-            Toast.makeText(this, "First four fields must be filled", Toast.LENGTH_SHORT).show();
+            requiredInfoSnackbar.show();
+            return false;
         }
     }
 
@@ -189,12 +255,49 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber2.setEnabled(true);
         mContactPhoneNumber3.setEnabled(true);
 
-        enableDeleteButton();
+        showDeleteButton();
         isInEditMode = true;
     }
 
-    private void enableDeleteButton() {
+    private void showDeleteButton() {
         mDeleteButton.setEnabled(true);
         mDeleteButton.setVisibility(View.VISIBLE);
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    //from: https://developer.android.com/training/camera/photobasics.html
+    private void dispatchTakePictureIntent(File photoFile) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "me.saipathuri.contacts.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private void takePicture(){
+        // Create the File where the photo should go
+        File photoFile = null;
+        try {
+            photoFile = ImageUtils.createImageFile(this);
+            temp_photo_path = photoFile.getAbsolutePath();
+            dispatchTakePictureIntent(photoFile);
+        } catch (IOException ex) {
+            // Error occurred while creating the File
+            Log.d(TAG, ex.toString());
+        }
     }
 }
