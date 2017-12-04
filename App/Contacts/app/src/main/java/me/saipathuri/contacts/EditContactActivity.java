@@ -46,7 +46,6 @@ public class EditContactActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Contact mContact;
     private Button mDeleteButton;
-    private Button mDoneButton;
     private ImageButton mCallButton;
     private ImageButton mSMSButton;
     private Box<Contact> mContactsBox;
@@ -91,7 +90,6 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber2 = (EditText) findViewById(R.id.et_edit_contact_phone_number_2);
         mContactPhoneNumber3 = (EditText) findViewById(R.id.et_edit_contact_phone_number_3);
         mDeleteButton = (Button) findViewById(R.id.btn_edit_contact_delete);
-        mDoneButton = (Button) findViewById(R.id.btn_done_editing);
         mCallButton = (ImageButton) findViewById(R.id.btn_view_contact_call);
         mSMSButton = (ImageButton) findViewById(R.id.btn_view_contact_sms);
 
@@ -119,13 +117,6 @@ public class EditContactActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mContactsBox.remove(mContact);
-                leaveActivity();
-            }
-        });
-        //pressing the done button will return to the contacts list
-        mDoneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 leaveActivity();
             }
         });
@@ -310,7 +301,6 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber1.setEnabled(false);
         mContactPhoneNumber2.setEnabled(false);
         mContactPhoneNumber3.setEnabled(false);
-        mDoneButton.setVisibility(View.INVISIBLE);
         mDeleteButton.setVisibility(View.INVISIBLE);
         mCallButton.setVisibility(View.VISIBLE);
         mSMSButton.setVisibility(View.VISIBLE);
@@ -329,7 +319,6 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber1.setEnabled(true);
         mContactPhoneNumber2.setEnabled(true);
         mContactPhoneNumber3.setEnabled(true);
-        mDoneButton.setVisibility(View.VISIBLE);
         mCallButton.setVisibility(View.INVISIBLE);
         mSMSButton.setVisibility(View.INVISIBLE);
 
