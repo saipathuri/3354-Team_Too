@@ -20,12 +20,18 @@ public class EmailValidator implements BaseValidator {
      */
     @Override
     public boolean validate(String s) {
+
+        if(s.length() == 0){
+            return false;
+        }
         //split by . to verify end
         String[] tld_tokens = s.split("\\.");
-        String tld = tld_tokens[tld_tokens.length-1];
+        if(tld_tokens.length > 0) {
+            String tld = tld_tokens[tld_tokens.length - 1];
 
-        if(!acceptableTlds.contains(tld)){
-            return false;
+            if (!acceptableTlds.contains(tld)) {
+                return false;
+            }
         }
 
         //split by @ to verify there is a domain
