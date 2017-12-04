@@ -65,9 +65,13 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment;
             switch (i){
                 case 0: fragment = ViewContactsFragment.newInstance();
+                        break;
                 case 1: fragment = ViewContactsFragment.newInstance();
+                        break;
                 case 2: fragment = ViewContactsFragment.newInstance();
+                        break;
                 default: fragment = ViewContactsFragment.newInstance();
+                        break;
             }
             return fragment;
         }
@@ -82,8 +86,11 @@ public class MainActivity extends AppCompatActivity {
             String title = "";
             switch (position){
                 case 0: title = "Contacts";
+                        break;
                 case 1: title = "Groups";
+                        break;
                 case 2: title = "Search";
+                        break;
                 default: title = "ContactsApp";
             }
             return title;
