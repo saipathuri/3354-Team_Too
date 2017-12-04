@@ -310,6 +310,10 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber1.setEnabled(false);
         mContactPhoneNumber2.setEnabled(false);
         mContactPhoneNumber3.setEnabled(false);
+        mDoneButton.setVisibility(View.INVISIBLE);
+        mDeleteButton.setVisibility(View.INVISIBLE);
+        mCallButton.setVisibility(View.VISIBLE);
+        mSMSButton.setVisibility(View.VISIBLE);
         hideDeleteButton();
     }
 
@@ -325,6 +329,9 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber1.setEnabled(true);
         mContactPhoneNumber2.setEnabled(true);
         mContactPhoneNumber3.setEnabled(true);
+        mDoneButton.setVisibility(View.VISIBLE);
+        mCallButton.setVisibility(View.INVISIBLE);
+        mSMSButton.setVisibility(View.INVISIBLE);
 
         showDeleteButton();
         isInEditMode = true;
