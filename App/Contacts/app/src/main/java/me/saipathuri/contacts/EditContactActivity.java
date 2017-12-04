@@ -32,6 +32,8 @@ import java.util.Date;
 
 import io.objectbox.Box;
 import me.saipathuri.contacts.utils.ImageUtils;
+import me.saipathuri.contacts.utils.validators.EmailValidator;
+import me.saipathuri.contacts.utils.validators.PhoneNumberValidator;
 
 public class EditContactActivity extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
@@ -53,6 +55,8 @@ public class EditContactActivity extends AppCompatActivity {
     private CoordinatorLayout editContactCoordinatorLayout;
     private Snackbar requiredInfoSnackbar;
     private Snackbar successSnackbar;
+    private EmailValidator emailValidator = new EmailValidator();
+    private PhoneNumberValidator phoneNumberValidator = new PhoneNumberValidator();
 
     //for taking picture
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -197,7 +201,7 @@ public class EditContactActivity extends AppCompatActivity {
         mContact.setEmailAddress(mContactEmailAddress.getText().toString().trim());
         mContact.setPhoneNumber1(mContactPhoneNumber1.getText().toString().trim());
         mContact.setPhoneNumber2(mContactPhoneNumber2.getText().toString().trim());
-        mContact.setPhoneNumber2(mContactPhoneNumber3.getText().toString().trim());
+        mContact.setPhoneNumber3(mContactPhoneNumber3.getText().toString().trim());
     }
 
     /**
@@ -269,15 +273,72 @@ public class EditContactActivity extends AppCompatActivity {
      */
     private boolean saveContact() {
         readContactInfoFromFields();
-        if(!mContact.getFirstName().isEmpty() &&
-                !mContact.getLastName().isEmpty() &&
-                !mContact.getPhoneNumber1().isEmpty()) {
+        if(validateFields()) {
             mContactsBox.put(mContact);
             successSnackbar.show();
             return true;
         } else{
+            return false;
+        }
+    }
+
+    private boolean validateFields() {
+
+        if(mContact.getFirstName().isEmpty() ||
+                mContact.getLastName().isEmpty() ||
+                mContact.getPhoneNumber1().isEmpty()){
             requiredInfoSnackbar.show();
             return false;
+        }
+
+        if(mContact.getPhoneNumber1() != null && !mContact.getPhoneNumber1().isEmpty()){
+            boolean valid = phoneNumberValidator.validate(mContact.getPhoneNumber1());
+            if(!valid){
+                Log.d(TAG, "ph1: " + mContact.getPhoneNumber1());
+                showPhoneNumberFormatError(1);
+                return false;
+            }
+        }
+        if(mContact.getPhoneNumber2() != null && !mContact.getPhoneNumber2().isEmpty()){
+            boolean valid = phoneNumberValidator.validate(mContact.getPhoneNumber2());
+            if(!valid){
+                Log.d(TAG, "ph2: " + mContact.getPhoneNumber2());
+                showPhoneNumberFormatError(2);
+                return false;
+            }
+        }
+        if(mContact.getPhoneNumber3() != null && !mContact.getPhoneNumber3().isEmpty()){
+            boolean valid = phoneNumberValidator.validate(mContact.getPhoneNumber3());
+            if(!valid){
+                Log.d(TAG, "ph3: " + mContact.getPhoneNumber3());
+                showPhoneNumberFormatError(3);
+                return false;
+            }
+        }
+        if(mContact.getEmailAddress() != null && !mContact.getEmailAddress().isEmpty()){
+            boolean valid = emailValidator.validate(mContact.getEmailAddress());
+            if(!valid){
+                Snackbar.make(editContactCoordinatorLayout, "email address must be in format x@y.z", Snackbar.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void showPhoneNumberFormatError(int number){
+        Log.d(TAG, "ph error called with number: " + number);
+        switch (number){
+            case 1: Snackbar.make(editContactCoordinatorLayout, "Phone Number 1 should be in the format XXXXXXXXX", Snackbar.LENGTH_SHORT).show();
+                    Log.d(TAG, "showing ph1 error");
+                    break;
+            case 2: Snackbar.make(editContactCoordinatorLayout, "Phone Number 2 should be in the format XXXXXXXXX", Snackbar.LENGTH_SHORT).show();
+                    Log.d(TAG, "showing ph2 error");
+                    break;
+            case 3: Snackbar.make(editContactCoordinatorLayout, "Phone Number 3 should be in the format XXXXXXXXX", Snackbar.LENGTH_SHORT).show();
+                    Log.d(TAG, "showing ph3 error");
+                    break;
+            default: return;
         }
     }
 
