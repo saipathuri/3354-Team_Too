@@ -46,7 +46,8 @@ public class EditContactActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private Contact mContact;
     private Button mDeleteButton;
-    private Button mDoneButton;
+    private ImageButton mCallButton;
+    private ImageButton mSMSButton;
     private Box<Contact> mContactsBox;
     private boolean isInEditMode = false;
     private CoordinatorLayout editContactCoordinatorLayout;
@@ -89,7 +90,8 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber2 = (EditText) findViewById(R.id.et_edit_contact_phone_number_2);
         mContactPhoneNumber3 = (EditText) findViewById(R.id.et_edit_contact_phone_number_3);
         mDeleteButton = (Button) findViewById(R.id.btn_edit_contact_delete);
-        mDoneButton = (Button) findViewById(R.id.btn_done_editing);
+        mCallButton = (ImageButton) findViewById(R.id.btn_view_contact_call);
+        mSMSButton = (ImageButton) findViewById(R.id.btn_view_contact_sms);
 
         editContactCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_edit_contact);
 
@@ -99,6 +101,8 @@ public class EditContactActivity extends AppCompatActivity {
 
         successSnackbar = Snackbar.make(editContactCoordinatorLayout, Constants.CONTACT_EDIT_SUCCESS,
                 Snackbar.LENGTH_SHORT);
+
+        final Snackbar needPhoneNumberSnackbar = Snackbar.make(editContactCoordinatorLayout, "This contact needs a phone number to complete this action.", Snackbar.LENGTH_SHORT);
 
 
         //set photo button onClick
@@ -116,13 +120,7 @@ public class EditContactActivity extends AppCompatActivity {
                 leaveActivity();
             }
         });
-        //pressing the done button will return to the contacts list
-        mDoneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                leaveActivity();
-            }
-        });
+
 
         Intent intent = getIntent();
         if(intent != null && intent.hasExtra(Constants.CONTACT_ID_EXTRA_KEY)){
@@ -136,6 +134,35 @@ public class EditContactActivity extends AppCompatActivity {
             hideDeleteButton();
         }
 
+        mCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!mContact.getPhoneNumber1().isEmpty()){
+                    String phoneNumber = mContact.getPhoneNumber1();
+                    String uri = "tel:"+phoneNumber.trim();
+                    Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                    dialIntent.setData(Uri.parse(uri));
+                    startActivity(dialIntent);
+                }else{
+                    needPhoneNumberSnackbar.show();
+                }
+            }
+        });
+
+        mSMSButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!mContact.getPhoneNumber1().isEmpty()){
+                    String phoneNumber = mContact.getPhoneNumber1();
+                    String uri = "sms:"+phoneNumber.trim();
+                    Intent SMSIntent = new Intent(Intent.ACTION_VIEW);
+                    SMSIntent.setData(Uri.parse(uri));
+                    startActivity(SMSIntent);
+                }else{
+                    needPhoneNumberSnackbar.show();
+                }
+            }
+        });
     }
 
     /**
@@ -274,6 +301,9 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber1.setEnabled(false);
         mContactPhoneNumber2.setEnabled(false);
         mContactPhoneNumber3.setEnabled(false);
+        mDeleteButton.setVisibility(View.INVISIBLE);
+        mCallButton.setVisibility(View.VISIBLE);
+        mSMSButton.setVisibility(View.VISIBLE);
         hideDeleteButton();
     }
 
@@ -289,6 +319,8 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber1.setEnabled(true);
         mContactPhoneNumber2.setEnabled(true);
         mContactPhoneNumber3.setEnabled(true);
+        mCallButton.setVisibility(View.INVISIBLE);
+        mSMSButton.setVisibility(View.INVISIBLE);
 
         showDeleteButton();
         isInEditMode = true;
