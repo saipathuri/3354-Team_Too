@@ -5,6 +5,9 @@ import io.objectbox.annotation.Id;
 
 /**
  * Created by saipathuri on 11/1/17.
+ * This class is a model for the information that we store in our database.
+ * The @Entity annotation lets our database library know that this is a model.
+ * The @Id annotation on long id lets our database library know to update that field with the id in the db.
  */
 
 @Entity
@@ -14,8 +17,6 @@ public class Contact {
     long id;
     String firstName;
     String lastName;
-
-    //three different phone number strings because ObjectBox doesn't support lists
     String phoneNumber1;
     String phoneNumber2;
     String phoneNumber3;

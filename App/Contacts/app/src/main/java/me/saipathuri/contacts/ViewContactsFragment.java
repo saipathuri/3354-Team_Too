@@ -23,9 +23,8 @@ import io.objectbox.query.Query;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ViewContactsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This Fragment displays a list of all existing contacts and allows users to create new contacts
+ * and modify existing contacts.
  */
 public class ViewContactsFragment extends Fragment {
     private final String TAG = this.getClass().getSimpleName();
@@ -37,24 +36,19 @@ public class ViewContactsFragment extends Fragment {
     private FloatingActionButton mAddContactFloatingActionButton;
     private Query<Contact> contactsQuery;
 
-//    private OnFragmentInteractionListener mListener;
-
     public ViewContactsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ViewContactsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ViewContactsFragment newInstance() {
         ViewContactsFragment fragment = new ViewContactsFragment();
         return fragment;
     }
 
+    /**
+     * When the fragment is created, the Contacts database is loaded. It also creates a database query
+     *  that retrieves all contacts in alphabetical order.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,17 +60,24 @@ public class ViewContactsFragment extends Fragment {
         if(mContacts.size() == 0){
             Toast.makeText(getActivity(), "No contacts saved. Add Some!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
+    /**
+     * This method retrieves uses the contactsQuery to retrieve all contacts in alphabetical order.
+     * It then assigns those contacts to mContacts, an ArrayList<Contact>
+     * @param firstRun if false, then the adapter is notified. If true, the adapter is not notified because it is not created yet.
+     */
     private void updateContacts(Boolean firstRun){
         mContacts = new ArrayList<>(contactsQuery.find());
         if(!firstRun) {
-            mAdapter.notifyDataSetChanged();
+            mAdapter.updateContactsList(mContacts);
         }
-//        mAdapter.updateContactsList(mContacts);
     }
 
+    /**
+     * Initializes and sets up neccessary views.
+     * @return a root view containing all the elements in the fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,60 +104,35 @@ public class ViewContactsFragment extends Fragment {
         return rootView;
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-//        mListener = null;
-    }
-
+    /**
+     * Update the contacts list when resuming the fragment
+     */
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
         updateContacts(false);
-
     }
 
+    /**
+     * Used to start the EditContact activity
+     */
     private void startCreateContact() {
         Intent startEditContact = new Intent(getActivity(), EditContactActivity.class);
         startActivityForResult(startEditContact, 1);
     }
 
+    /**
+     * This method is called when EditContact activity is finished. If the result code is OK, then we run @see #updateContacts(Boolean firstRun).
+     * @param requestCode the request code corresponds to the code that we started the activity with in @see #startCreateContact()
+     * @param resultCode the result code indicates whether or not the activity finished successfully
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
                 updateContacts(false);
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
         }
     }
-
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
 }

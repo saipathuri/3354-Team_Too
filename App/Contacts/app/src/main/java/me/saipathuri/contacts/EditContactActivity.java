@@ -50,7 +50,6 @@ public class EditContactActivity extends AppCompatActivity {
     private Box<Contact> mContactsBox;
     private boolean isInEditMode = false;
     private CoordinatorLayout editContactCoordinatorLayout;
-    private CoordinatorLayout viewContactsCoordinatorLayout;
     private Snackbar requiredInfoSnackbar;
     private Snackbar successSnackbar;
 
@@ -61,6 +60,9 @@ public class EditContactActivity extends AppCompatActivity {
     //this is used in case the user opens camera, but doesn't take a new picture
     private String temp_photo_path;
 
+    /**
+     * This method initializes all views, sets their behaviors as needed, and sets the UI to be in view mode (@see #setViewMode()) or edit mode (@see #setEditMode()).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +92,6 @@ public class EditContactActivity extends AppCompatActivity {
         mDoneButton = (Button) findViewById(R.id.btn_done_editing);
 
         editContactCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_edit_contact);
-        viewContactsCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_view_contacts);
 
         //Set snackbar info
         requiredInfoSnackbar = Snackbar.make(editContactCoordinatorLayout, Constants.REQUIRED_INFO_MISSING_MSG,
@@ -137,11 +138,17 @@ public class EditContactActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Hides the delete button when a new contact is being created.
+     */
     private void hideDeleteButton(){
         mDeleteButton.setEnabled(false);
         mDeleteButton.setVisibility(View.INVISIBLE);
     }
-    // called if existing contact is being edited. This means mId is not null.
+
+    /**
+     * This method populates the view with information from the database.
+     */
     private void fillContactInfoToFields() {
         mContactImageButton.setImageBitmap(ImageUtils.getBitmapFromPath(this, mContactImageButton, mContact.getPhotoPath()));
         mContactFirstName.setText(mContact.getFirstName());
@@ -153,9 +160,10 @@ public class EditContactActivity extends AppCompatActivity {
         mToolbar.setTitle(mContact.getFirstName() + " " + mContact.getLastName());
     }
 
-
-    // called if new contact is being created or edited.
-    // TODO: find a way to save image directory
+    /**
+     * This method is called if a new contact is being saved, or an existing contact has been edited and is being saved.
+     * It takes information from the fields and stores in the Contact (@link #Contact) model.
+     */
     private void readContactInfoFromFields() {
         mContact.setFirstName(mContactFirstName.getText().toString().trim());
         mContact.setLastName(mContactLastName.getText().toString().trim());
@@ -164,6 +172,10 @@ public class EditContactActivity extends AppCompatActivity {
         mContact.setPhoneNumber2(mContactPhoneNumber2.getText().toString().trim());
         mContact.setPhoneNumber2(mContactPhoneNumber3.getText().toString().trim());
     }
+
+    /**
+     * Sets the behaviors of the menu buttons.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -178,6 +190,10 @@ public class EditContactActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Sets behavior of the menu bar buttons.
+     * @param item the item that was clicked by the user
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -205,6 +221,12 @@ public class EditContactActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Used for the picture taking functionality.
+     * Saves the filepath to Contact model and sets the ImageButton to the picture.
+     * @param requestCode code indicates what activity the result is from
+     * @param resultCode code indicates whether the result was successful or not
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -214,6 +236,10 @@ public class EditContactActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves contact to database.
+     * @return True if contact has been saved. False if more information needed.
+     */
     private boolean saveContact() {
         readContactInfoFromFields();
         if(!mContact.getFirstName().isEmpty() &&
@@ -228,12 +254,18 @@ public class EditContactActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called when user is done with editing.
+     */
     private void leaveActivity(){
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 
+    /**
+     * Disables all fields from being edited.
+     */
     private void setViewMode(){
         mContactImageButton.setClickable(false);
         mContactFirstName.setEnabled(false);
@@ -244,7 +276,10 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber3.setEnabled(false);
         hideDeleteButton();
     }
-    
+
+    /**
+     * Enables all fields to be edited.
+     */
     private void setEditMode(){
         mContactImageButton.setClickable(true);
         mContactFirstName.setEnabled(true);
@@ -259,11 +294,17 @@ public class EditContactActivity extends AppCompatActivity {
         isInEditMode = true;
     }
 
+    /**
+     * Used to show the delete button
+     */
     private void showDeleteButton() {
         mDeleteButton.setEnabled(true);
         mDeleteButton.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * used to hide the keyboard
+     */
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
@@ -288,6 +329,9 @@ public class EditContactActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Used to take a contact picture.
+     */
     private void takePicture(){
         // Create the File where the photo should go
         File photoFile = null;
