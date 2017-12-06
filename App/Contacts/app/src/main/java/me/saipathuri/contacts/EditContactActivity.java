@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import io.objectbox.Box;
 import me.saipathuri.contacts.utils.ImageUtils;
@@ -140,9 +142,15 @@ public class EditContactActivity extends AppCompatActivity {
             setEditMode();
             hideDeleteButton();
         }
-        if(mContact.groupsRelation.size() != 0){
-            mGroup = (Group) mContact.groupsRelation.toArray()[0];
-            mGroupTextView.setText(mGroup.getGroupName());
+
+        ArrayList<Group> groups = new ArrayList(mGroupsBox.getAll());
+        for(Group group : groups){
+            for(Contact c: group.contactsRelation){
+                if(c.getId() == mId){
+                    mGroup = group;
+                    mGroupTextView.setText(mGroup.getGroupName());
+                }
+            }
         }
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,7 +305,6 @@ public class EditContactActivity extends AppCompatActivity {
         readContactInfoFromFields();
         if(validateFields()) {
             mGroup.contactsRelation.add(mContact);
-            mContact.groupsRelation.add(mGroup);
             mContactsBox.put(mContact);
             mGroupsBox.put(mGroup);
             successSnackbar.show();

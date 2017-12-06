@@ -49,7 +49,7 @@ public class GroupsFragment extends Fragment implements AddGroupDialogFragment.A
         mContactsBox = ((ContactsApp) getActivity().getApplication()).getBoxStore().boxFor(Contact.class);
         mGroupsBox = ((ContactsApp) getActivity().getApplication()).getBoxStore().boxFor(Group.class);
         groups = new ArrayList(mGroupsBox.getAll());
-        mAdapter = new GroupsListAdapter(groups, Constants.GROUPS_ONCLICK_VIEW_GROUP);
+        mAdapter = new GroupsListAdapter(groups, getActivity(), Constants.GROUPS_ONCLICK_VIEW_GROUP);
 
     }
 

@@ -59,6 +59,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.saipathuri.contacts.EditContactActivity" />
         </activity>
+        <activity android:name=".ViewContactsInGroupActivity"></activity>
     </application>
 
 </manifest>

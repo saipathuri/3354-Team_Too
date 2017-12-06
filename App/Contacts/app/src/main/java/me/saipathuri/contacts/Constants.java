@@ -18,4 +18,5 @@ public class Constants {
     public static final int GROUPS_ONCLICK_VIEW_GROUP = 11;
     public static final int REQUEST_CODE_SELECT_GROUP = 101;
     public static final String SELECTED_GROUP_ID = "selected_group";
+    public static String VIEW_GROUP_ID_EXTRA = "group_to_view";
 }
