@@ -3,7 +3,6 @@ package me.saipathuri.contacts;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 import io.objectbox.relation.ToMany;
-import io.objectbox.relation.ToOne;
 
 /**
  * Created by saipathuri on 11/1/17.
@@ -25,7 +24,7 @@ public class Contact {
     String emailAddress;
     String photoPath;
 
-    ToMany<Group> groups;
+    ToMany<Group> groupsRelation;
 
     public Contact(long id, String firstName, String lastName, String phoneNumber1, String phoneNumber2, String phoneNumber3, String emailAddress, String photoPath) {
         this.id = id;
