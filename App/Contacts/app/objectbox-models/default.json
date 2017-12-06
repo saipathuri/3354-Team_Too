@@ -41,12 +41,38 @@
           "name": "lastName"
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "2:8301389743641172406",
+          "name": "groups"
+        }
+      ]
+    },
+    {
+      "id": "2:969437414927824962",
+      "lastPropertyId": "2:1119983025018908518",
+      "name": "Group",
+      "properties": [
+        {
+          "id": "1:267578227215274162",
+          "name": "id"
+        },
+        {
+          "id": "2:1119983025018908518",
+          "name": "groupName"
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:2712467976174760313",
+          "name": "contacts"
+        }
+      ]
     }
   ],
-  "lastEntityId": "1:5792596823537907698",
+  "lastEntityId": "2:969437414927824962",
   "lastIndexId": "0:0",
-  "lastRelationId": "0:0",
+  "lastRelationId": "2:8301389743641172406",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,

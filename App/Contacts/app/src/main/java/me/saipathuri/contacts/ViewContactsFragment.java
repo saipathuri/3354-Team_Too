@@ -98,7 +98,7 @@ public class ViewContactsFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new ContactListAdapter(mContacts);
+        mAdapter = new ContactListAdapter(mContacts, Constants.VIEW_ONCLICK);
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
