@@ -289,10 +289,12 @@ public class EditContactActivity extends AppCompatActivity {
         }
         if (requestCode == Constants.REQUEST_CODE_SELECT_GROUP){
             //TODO: implement this
-            if(data.hasExtra(Constants.SELECTED_GROUP_ID)) {
-                long id = data.getLongExtra(Constants.SELECTED_GROUP_ID, 0);
-                mGroup = mGroupsBox.get(id);
-                mGroupTextView.setText(mGroup.getGroupName());
+            if(data != null) {
+                if (data.hasExtra(Constants.SELECTED_GROUP_ID)) {
+                    long id = data.getLongExtra(Constants.SELECTED_GROUP_ID, 0);
+                    mGroup = mGroupsBox.get(id);
+                    mGroupTextView.setText(mGroup.getGroupName());
+                }
             }
         }
     }
@@ -304,9 +306,11 @@ public class EditContactActivity extends AppCompatActivity {
     private boolean saveContact() {
         readContactInfoFromFields();
         if(validateFields()) {
-            mGroup.contactsRelation.add(mContact);
+            if(mGroup != null) {
+                mGroup.contactsRelation.add(mContact);
+                mGroupsBox.put(mGroup);
+            }
             mContactsBox.put(mContact);
-            mGroupsBox.put(mGroup);
             successSnackbar.show();
             return true;
         } else{
