@@ -87,4 +87,11 @@ public class GroupsFragment extends Fragment implements AddGroupDialogFragment.A
         groups = new ArrayList(mGroupsBox.getAll());
         mAdapter.updateGroupsList(groups);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        groups = new ArrayList(mGroupsBox.getAll());
+        mAdapter.updateGroupsList(groups);
+    }
 }
