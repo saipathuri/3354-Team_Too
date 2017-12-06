@@ -1,10 +1,12 @@
 package me.saipathuri.contacts;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
@@ -40,6 +42,10 @@ public class ViewContactsInGroupActivity extends AppCompatActivity {
         mDisplayContactsRecyclerView.setLayoutManager(linearLayoutManager);
         mDisplayContactsRecyclerView.setAdapter(adapter);
 
+        Toolbar toolbar = findViewById(R.id.tb_view_group);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Group: " + group.getGroupName());
         Button deleteGroupButton = findViewById(R.id.btn_delete_group);
         deleteGroupButton.setOnClickListener(new View.OnClickListener() {
             @Override
