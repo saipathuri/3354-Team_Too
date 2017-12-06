@@ -70,7 +70,7 @@ public class EditGroupActivity extends AppCompatActivity{
 
         mContactsRecyclerView = (RecyclerView) findViewById(R.id.rv_edit_group);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new ContactListAdapter(new ArrayList<Contact>(mContactsBox.getAll()));
+        mAdapter = new ContactListAdapter(new ArrayList<Contact>(mContactsBox.getAll()), Constants.GROUPS_ONCLICK);
         mContactsRecyclerView.setLayoutManager(linearLayoutManager);
         mContactsRecyclerView.setAdapter(mAdapter);
         

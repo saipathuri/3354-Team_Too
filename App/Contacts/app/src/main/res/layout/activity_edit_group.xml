@@ -38,8 +38,7 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomdOf="@id/et_edit_group_name">
+            app:layout_constraintStart_toStartOf="parent">
 
         </android.support.v7.widget.RecyclerView>
 

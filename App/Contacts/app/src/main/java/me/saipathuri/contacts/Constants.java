@@ -12,4 +12,6 @@ public class Constants {
     public static final String CONTACT_EDIT_SUCCESS = "Contact successfully saved.";
     public static final String GROUP_EDIT_SUCCESS = "Group successfully saved.";
     public static final String SEARCH_UNSUCCESSFUL = "Search was unsuccessful.";
+    public static final int VIEW_ONCLICK = 1;
+    public static final int GROUPS_ONCLICK = 2;
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,12 @@ import me.saipathuri.contacts.utils.ImageUtils;
 
 class ContactListAdapter extends RecyclerView.Adapter {
     private ArrayList<Contact> contacts;
+    private int onClickBehavior;
 
 
-    ContactListAdapter(ArrayList<Contact> contacts) {
+    ContactListAdapter(ArrayList<Contact> contacts, int onClickBehavior) {
         this.contacts = contacts;
+        this.onClickBehavior = onClickBehavior;
     }
 
     public void updateContactsList(List<Contact> newlist) {
@@ -54,6 +57,30 @@ class ContactListAdapter extends RecyclerView.Adapter {
         contactViewHolder.setPhoneNumber(phoneNumber);
         contactViewHolder.setEmail(emailAddress);
         contactViewHolder.setImage(photoPath);
+
+        switch (onClickBehavior){
+            case Constants.VIEW_ONCLICK:
+                setOnClickAsView(holder, position);
+                break;
+            case Constants.GROUPS_ONCLICK:
+                setOnClickAsGroup(holder, position);
+                break;
+        }
+    }
+
+    private void setOnClickAsGroup(RecyclerView.ViewHolder holder, final int position) {
+        ((ContactViewHolder) holder).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Contact contact = contacts.get(position);
+                Intent intent = new Intent(view.getContext(), EditContactActivity.class);
+                Toast.makeText(view.getContext(), "You clicked a contact in a group", Toast.LENGTH_SHORT).show();
+                //TODO: fill in the behavior you want
+            }
+        });
+    }
+
+    private void setOnClickAsView(RecyclerView.ViewHolder holder, final int position) {
         ((ContactViewHolder) holder).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
