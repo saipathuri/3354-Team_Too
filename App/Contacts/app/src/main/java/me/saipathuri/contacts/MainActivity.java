@@ -66,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
             switch (i){
                 case 0: fragment = ViewContactsFragment.newInstance();
                         break;
-                case 1: fragment = ViewContactsFragment.newInstance();
+                case 1: fragment = GroupsFragment.newInstance();
                         break;
-                case 2: fragment = ViewContactsFragment.newInstance();
+                case 2: fragment = SearchFragment.newInstance();
                         break;
                 default: fragment = ViewContactsFragment.newInstance();
                         break;
