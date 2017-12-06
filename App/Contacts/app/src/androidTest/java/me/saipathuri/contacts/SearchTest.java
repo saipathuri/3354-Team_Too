@@ -45,8 +45,8 @@ public class SearchTest extends AbstractObjectBoxTest {
         Contact contact2FromBox = Box.get(id2);
 
         if(queryTerm.length() > 0) {
-            searchQueryFirstName = Box.query().equal(Contact_.FirstName(), queryTerm).build();
-            Query searchQueryLastName = Box.query().equal(Contact_.LastName(), queryTerm).build();
+            searchQueryFirstName = Box.query().equal(Contact_.firstName, queryTerm).build();
+            Query searchQueryLastName = Box.query().equal(Contact_.lastName, queryTerm).build();
             List<Contact> firstNameMatches = searchQueryFirstName.find();
             List<Contact> lastNameMatches = searchQueryLastName.find();
             HashSet<Contact> matches = new HashSet<>();
@@ -59,23 +59,7 @@ public class SearchTest extends AbstractObjectBoxTest {
             assertEquals("Contact name ", "Haleigh", finalMatches.get(0).getFirstName());
 
         }
-
-       /* if(queryTerm == (contact.getFirstName()))
-        {
-            assertEquals("Search name: ", contact.getFirstName(), contactFromBox.getFirstName());
-        }
-        else if(queryTerm ==(contact.getLastName()))
-        {
-            assertEquals("Search name: ", contact.getLastName(), contactFromBox.getLastName());
-        }
-        else if(queryTerm == (contact2.getFirstName()))
-        {
-            assertEquals("Search name: ", contact2.getFirstName(), contact2FromBox.getFirstName());
-        }
-        else if(queryTerm ==(contact2.getLastName()))
-        {
-            assertEquals("Search name: ", contact2.getLastName(), contact2FromBox.getLastName());
-        }*/
+        
 
     }
 }
