@@ -17,7 +17,7 @@ public class Group {
 
     String groupName;
 
-    ToMany<Contact> contacts;
+    ToMany<Contact> contactsRelation;
 
     public Group(long id, String groupName) {
         this.id = id;

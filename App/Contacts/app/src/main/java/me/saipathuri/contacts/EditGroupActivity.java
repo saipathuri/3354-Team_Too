@@ -175,16 +175,13 @@ public class EditGroupActivity extends AppCompatActivity{
         if(!mGroup.getGroupName().isEmpty()) {
      //        &&   !mGroup.contacts().isEmpty()) {
 
-     /**
-           // mGroupsBox.put(mGroup);
-
             for (Contact contactInGroup : contactsToAdd){
-                mGroup.contacts.add(contactInGroup);
-            }
-            mGroupsBox.boxFor(Group.class).put(mGroup);
+                mGroup.contactsRelation.add(contactInGroup);
 
-            // for each contact add group like above
-      */
+                contactInGroup.groupsRelation.add(mGroup);
+                mContactsBox.put(contactInGroup);
+            }
+            mGroupsBox.put(mGroup);
 
             successGroupSnackbar.show();
             return true;
