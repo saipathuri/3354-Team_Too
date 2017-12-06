@@ -7,7 +7,7 @@ package me.saipathuri.contacts;
 public class Constants {
 
     public static final String CONTACT_ID_EXTRA_KEY = "contact_id";
-    public static final String REQUIRED_INFO_MISSING_MSG = "Please enter at least the first name and at least one phone number";
+    public static final String REQUIRED_INFO_MISSING_MSG = "Please enter at least the first and last name and at least one phone number";
     public static final String REQUIRED_GROUP_INFO_MISSING_MSG = "Please enter at least the group name and a group member.";
     public static final String CONTACT_EDIT_SUCCESS = "Contact successfully saved.";
     public static final String GROUP_EDIT_SUCCESS = "Group successfully saved.";
