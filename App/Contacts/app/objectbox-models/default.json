@@ -43,8 +43,8 @@
       ],
       "relations": [
         {
-          "id": "2:8301389743641172406",
-          "name": "groups"
+          "id": "3:4781410777070937531",
+          "name": "groupsRelation"
         }
       ]
     },
@@ -64,15 +64,15 @@
       ],
       "relations": [
         {
-          "id": "1:2712467976174760313",
-          "name": "contacts"
+          "id": "4:2116345671589830061",
+          "name": "contactsRelation"
         }
       ]
     }
   ],
   "lastEntityId": "2:969437414927824962",
   "lastIndexId": "0:0",
-  "lastRelationId": "2:8301389743641172406",
+  "lastRelationId": "4:2116345671589830061",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
@@ -81,6 +81,9 @@
   "retiredPropertyUids": [
     167783828049544085
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    8301389743641172406,
+    2712467976174760313
+  ],
   "version": 1
 }
