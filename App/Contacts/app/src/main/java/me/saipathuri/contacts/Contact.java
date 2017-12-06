@@ -3,7 +3,6 @@ package me.saipathuri.contacts;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 import io.objectbox.relation.ToMany;
-import io.objectbox.relation.ToOne;
 
 /**
  * Created by saipathuri on 11/1/17.
