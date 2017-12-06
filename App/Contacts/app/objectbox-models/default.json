@@ -43,7 +43,11 @@
       ],
       "relations": [
         {
+<<<<<<< HEAD
           "id": "3:4781410777070937531",
+=======
+          "id": "4:7327314690118910826",
+>>>>>>> 0e8b3988bad810c7bdaafd7b31ed228d5ce14043
           "name": "groupsRelation"
         }
       ]
@@ -64,7 +68,7 @@
       ],
       "relations": [
         {
-          "id": "4:2116345671589830061",
+          "id": "3:5260802004211520729",
           "name": "contactsRelation"
         }
       ]
@@ -72,7 +76,7 @@
   ],
   "lastEntityId": "2:969437414927824962",
   "lastIndexId": "0:0",
-  "lastRelationId": "4:2116345671589830061",
+  "lastRelationId": "4:7327314690118910826",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,

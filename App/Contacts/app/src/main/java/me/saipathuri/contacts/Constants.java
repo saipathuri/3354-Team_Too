@@ -14,4 +14,8 @@ public class Constants {
     public static final String SEARCH_UNSUCCESSFUL = "Search was unsuccessful.";
     public static final int VIEW_ONCLICK = 1;
     public static final int GROUPS_ONCLICK = 2;
+    public static final int GROUPS_ONCLICK_SELECT_GROUP = 10;
+    public static final int GROUPS_ONCLICK_VIEW_GROUP = 11;
+    public static final int REQUEST_CODE_SELECT_GROUP = 101;
+    public static final String SELECTED_GROUP_ID = "selected_group";
 }

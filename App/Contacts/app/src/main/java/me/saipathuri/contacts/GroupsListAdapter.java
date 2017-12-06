@@ -3,6 +3,7 @@ package me.saipathuri.contacts;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,24 @@ import me.saipathuri.contacts.utils.ImageUtils;
 
 public class GroupsListAdapter extends RecyclerView.Adapter {
 
+    private static final String TAG = "GroupsListAdapter";
     private ArrayList<Group> groups;
-    private int onClickBehavior;
+    GroupsRecyclerViewListener mListener;
+    int onClickBehavior;
 
-
-    GroupsListAdapter(ArrayList<Group> groups) {
+    GroupsListAdapter(ArrayList<Group> groups, int onClickBehavior) {
         this.groups = groups;
+        this.onClickBehavior = onClickBehavior;
+    }
+
+    GroupsListAdapter(ArrayList<Group> groups, int onClickBehavior, GroupsRecyclerViewListener listener) {
+        this.groups = groups;
+        mListener = listener;
+        this.onClickBehavior = onClickBehavior;
+    };
+
+    public interface GroupsRecyclerViewListener{
+        public void groupClicked(int position);
     }
 
     public void updateGroupsList(List<Group> newlist) {
@@ -44,7 +57,7 @@ public class GroupsListAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final Group group = groups.get(position);
 
         String name = group.getGroupName();
@@ -52,16 +65,27 @@ public class GroupsListAdapter extends RecyclerView.Adapter {
         GroupsListAdapter.GroupViewHolder groupViewHolder = (GroupsListAdapter.GroupViewHolder) holder;
         groupViewHolder.setName(name);
 
-        ((GroupsListAdapter.GroupViewHolder) holder).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO: make a view group class
-                Group group = groups.get(position);
-                Intent intent = new Intent(view.getContext(), EditContactActivity.class);
-                intent.putExtra(Constants.CONTACT_ID_EXTRA_KEY, group.getId());
-                view.getContext().startActivity(intent);
-            }
-        });
+
+        if(onClickBehavior == Constants.GROUPS_ONCLICK_SELECT_GROUP) {
+            ((GroupViewHolder) holder).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "listened to select group");
+                    if(mListener != null)
+                        mListener.groupClicked(position);
+                }
+            });
+        }
+
+        if(onClickBehavior == Constants.GROUPS_ONCLICK_VIEW_GROUP) {
+            ((GroupViewHolder) holder).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "TBD");
+                }
+            });
+        }
+
 
     }
 

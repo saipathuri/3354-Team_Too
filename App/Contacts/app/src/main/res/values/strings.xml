@@ -8,4 +8,5 @@
     <string name="tab_text_2">Groups</string>
     <string name="tab_text_3">Search</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_pick_contact_for_group">PIckContactForGroupActivity</string>
 </resources>
