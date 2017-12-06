@@ -23,6 +23,7 @@ public class Contact {
     String phoneNumber3;
     String emailAddress;
     String photoPath;
+    boolean blacklisted;
 
     public Contact(long id, String firstName, String lastName, String phoneNumber1, String phoneNumber2, String phoneNumber3, String emailAddress, String photoPath) {
         this.id = id;
@@ -101,6 +102,14 @@ public class Contact {
 
     public void setPhotoPath(String photoPath) {
         this.photoPath = photoPath;
+    }
+
+    public boolean isBlacklisted() {
+        return blacklisted;
+    }
+
+    public void setBlacklisted(boolean blacklisted) {
+        this.blacklisted = blacklisted;
     }
 
     @Override
