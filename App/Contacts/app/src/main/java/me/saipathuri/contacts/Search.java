@@ -9,7 +9,7 @@ public class Search
     //first name used for search
     String searchName;
 
-    //TODO: getting the search name from the activity_view_contacts
+    //TODO: getting the search name from the activity_main
     //public String getSearchName() { return searchName; }
 
     //TODO: passing the first name for the contacts into the nameFound function
@@ -24,7 +24,7 @@ public class Search
         return false;
     }
 
-    //TODO: make the call for this function after search view in the activity_view_contacts
+    //TODO: make the call for this function after search view in the activity_main
     //TODO: has entered in a string and return message if not found and calling up the contact card
     //TODO: if is found in the search.
 

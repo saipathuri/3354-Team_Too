@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Contacts</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">Contacts</string>
+    <string name="tab_text_1">Contacts</string>
+    <string name="tab_text_2">Groups</string>
+    <string name="tab_text_3">Search</string>
+    <string name="action_settings">Settings</string>
 </resources>

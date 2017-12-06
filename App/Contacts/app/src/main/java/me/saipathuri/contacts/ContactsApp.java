@@ -18,7 +18,6 @@ public class ContactsApp extends Application {
 
         // do this once, for example in your Application class
         boxStore = MyObjectBox.builder().androidContext(ContactsApp.this).build();
-//        if (BuildConfig.DEBUG) new AndroidObjectBrowser(boxStore).start(this);
     }
 
     public BoxStore getBoxStore() {
