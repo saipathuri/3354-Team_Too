@@ -3,6 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/block_contact"
+        android:title="Block"
+        app:actionLayout="@layout/switch_item"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_edit"
         android:title="edit"
         app:showAsAction="always"
