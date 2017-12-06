@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -60,6 +61,7 @@ public class EditContactActivity extends AppCompatActivity {
     private Snackbar successSnackbar;
     private EmailValidator emailValidator = new EmailValidator();
     private PhoneNumberValidator phoneNumberValidator = new PhoneNumberValidator();
+    private CheckedTextView mBlacklistCheckedTextView;
 
     //for taking picture
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -103,7 +105,7 @@ public class EditContactActivity extends AppCompatActivity {
         mGroupTextView = (TextView) findViewById(R.id.tv_view_contact_group_name);
         mAddGroupImageButton = (ImageButton) findViewById(R.id.btn_view_add_group);
         editContactCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_edit_contact);
-
+        mBlacklistCheckedTextView = (CheckedTextView) findViewById(R.id.ctv_blacklist);
         //Set snackbar info
         requiredInfoSnackbar = Snackbar.make(editContactCoordinatorLayout, Constants.REQUIRED_INFO_MISSING_MSG,
                 Snackbar.LENGTH_LONG);
@@ -135,6 +137,7 @@ public class EditContactActivity extends AppCompatActivity {
         if(intent != null && intent.hasExtra(Constants.CONTACT_ID_EXTRA_KEY)){
             mId = intent.getLongExtra(Constants.CONTACT_ID_EXTRA_KEY, 0);
             mContact = mContactsBox.get(mId);
+            Log.d(TAG, "Blacklisted loading in intent: " + mContact.isBlacklisted());
             fillContactInfoToFields();
             setViewMode();
         }
@@ -213,6 +216,25 @@ public class EditContactActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mBlacklistCheckedTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mBlacklistCheckedTextView.isChecked()){
+                    mBlacklistCheckedTextView.setChecked(false);
+                    mContact.setBlacklisted(false);
+                    mContactsBox.put(mContact);
+                    Log.d(TAG, "Blacklisted: " + mContact.isBlacklisted());
+                }else{
+                    mBlacklistCheckedTextView.setChecked(true);
+                    mContact.setBlacklisted(true);
+                    mContactsBox.put(mContact);
+                    Log.d(TAG, "Blacklisted: " + mContact.isBlacklisted());
+                }
+
+
+            }
+        });
     }
 
     /**
@@ -235,6 +257,7 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber2.setText(mContact.getPhoneNumber2());
         mContactPhoneNumber3.setText(mContact.getPhoneNumber3());
         mToolbar.setTitle(mContact.getFirstName() + " " + mContact.getLastName());
+        mBlacklistCheckedTextView.setChecked(mContact.isBlacklisted());
     }
 
     /**
