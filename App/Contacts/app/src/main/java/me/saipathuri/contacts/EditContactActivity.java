@@ -148,7 +148,7 @@ public class EditContactActivity extends AppCompatActivity {
             for(Contact c: group.contactsRelation){
                 if(c.getId() == mId){
                     mGroup = group;
-                    mGroupTextView.setText(mGroup.getGroupName());
+                    mGroupTextView.setText("Group: " + mGroup.getGroupName());
                 }
             }
         }
@@ -182,11 +182,35 @@ public class EditContactActivity extends AppCompatActivity {
             }
         });
 
+        if(mGroup != null){
+            mAddGroupImageButton.setImageDrawable(getDrawable(android.R.drawable.btn_dialog));
+        }else{
+            mAddGroupImageButton.setImageDrawable(getDrawable(R.drawable.ic_add_white_24dp));
+        }
         mAddGroupImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent startAddGroupIntent = new Intent(view.getContext(), PickContactForGroupActivity.class);
-                startActivityForResult(startAddGroupIntent, Constants.REQUEST_CODE_SELECT_GROUP);
+                if(mGroup != null) {
+                    mGroup.contactsRelation.remove(mContact);
+                    mGroupsBox.put(mGroup);
+                    mGroupTextView.setText("Group: None");
+                    mAddGroupImageButton.setImageDrawable(getDrawable(R.drawable.ic_add_white_24dp));
+                    mGroup = null;
+                }else {
+                    Intent startAddGroupIntent = new Intent(view.getContext(), PickContactForGroupActivity.class);
+                    startActivityForResult(startAddGroupIntent, Constants.REQUEST_CODE_SELECT_GROUP);
+                }
+            }
+        });
+
+        mGroupTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mGroup != null){
+                    Intent intent = new Intent(view.getContext(), ViewContactsInGroupActivity.class);
+                    intent.putExtra(Constants.VIEW_GROUP_ID_EXTRA, mGroup.getId());
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -293,7 +317,7 @@ public class EditContactActivity extends AppCompatActivity {
                 if (data.hasExtra(Constants.SELECTED_GROUP_ID)) {
                     long id = data.getLongExtra(Constants.SELECTED_GROUP_ID, 0);
                     mGroup = mGroupsBox.get(id);
-                    mGroupTextView.setText(mGroup.getGroupName());
+                    mGroupTextView.setText("Group: " + mGroup.getGroupName());
                 }
             }
         }
