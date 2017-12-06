@@ -36,7 +36,7 @@ public class SearchTest extends AbstractObjectBoxTest {
 
         //setting another contact
         Contact contact2 = new Contact();
-        contact.setFirstName("Haleigh");
+        contact2.setFirstName("Haleigh");
         contact2.setLastName("Rogers");
         long id2 = box.put(contact2);
 
@@ -59,6 +59,6 @@ public class SearchTest extends AbstractObjectBoxTest {
         {
             assertEquals("Search name: ", contact2.getLastName(), contact2FromBox.getLastName());
         }
-        
+
     }
 }
