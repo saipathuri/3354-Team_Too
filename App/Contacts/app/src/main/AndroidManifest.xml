@@ -50,6 +50,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PickContactForGroupActivity"
+            android:label="@string/title_activity_pick_contact_for_group"
+            android:parentActivityName=".EditContactActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.saipathuri.contacts.EditContactActivity" />
+        </activity>
+        <activity android:name=".ViewContactsInGroupActivity"></activity>
     </application>
 
 </manifest>

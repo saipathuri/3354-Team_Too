@@ -2,6 +2,7 @@ package me.saipathuri.contacts;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToMany;
 
 /**
  * Created by saipathuri on 11/1/17.

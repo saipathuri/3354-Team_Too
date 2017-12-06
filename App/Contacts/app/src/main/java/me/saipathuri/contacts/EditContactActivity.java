@@ -1,11 +1,9 @@
 package me.saipathuri.contacts;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -23,12 +21,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import io.objectbox.Box;
 import me.saipathuri.contacts.utils.ImageUtils;
@@ -39,6 +38,8 @@ public class EditContactActivity extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
     private long mId;
     private ImageButton mContactImageButton;
+    private TextView mGroupTextView;
+    private ImageButton mAddGroupImageButton;
     private EditText mContactFirstName;
     private EditText mContactLastName;
     private EditText mContactEmailAddress;
@@ -47,10 +48,12 @@ public class EditContactActivity extends AppCompatActivity {
     private EditText mContactPhoneNumber3;
     private Toolbar mToolbar;
     private Contact mContact;
+    private Group mGroup;
     private Button mDeleteButton;
     private ImageButton mCallButton;
     private ImageButton mSMSButton;
     private Box<Contact> mContactsBox;
+    private Box<Group> mGroupsBox;
     private boolean isInEditMode = false;
     private CoordinatorLayout editContactCoordinatorLayout;
     private Snackbar requiredInfoSnackbar;
@@ -83,6 +86,7 @@ public class EditContactActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         mContactsBox = ((ContactsApp) getApplication()).getBoxStore().boxFor(Contact.class);
+        mGroupsBox = ((ContactsApp) getApplication()).getBoxStore().boxFor(Group.class);;
         mContact = new Contact();
 
         //Get all views in layout
@@ -96,7 +100,8 @@ public class EditContactActivity extends AppCompatActivity {
         mDeleteButton = (Button) findViewById(R.id.btn_edit_contact_delete);
         mCallButton = (ImageButton) findViewById(R.id.btn_view_contact_call);
         mSMSButton = (ImageButton) findViewById(R.id.btn_view_contact_sms);
-
+        mGroupTextView = (TextView) findViewById(R.id.tv_view_contact_group_name);
+        mAddGroupImageButton = (ImageButton) findViewById(R.id.btn_view_add_group);
         editContactCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout_edit_contact);
 
         //Set snackbar info
@@ -138,6 +143,15 @@ public class EditContactActivity extends AppCompatActivity {
             hideDeleteButton();
         }
 
+        ArrayList<Group> groups = new ArrayList(mGroupsBox.getAll());
+        for(Group group : groups){
+            for(Contact c: group.contactsRelation){
+                if(c.getId() == mId){
+                    mGroup = group;
+                    mGroupTextView.setText(mGroup.getGroupName());
+                }
+            }
+        }
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,6 +179,14 @@ public class EditContactActivity extends AppCompatActivity {
                 }else{
                     needPhoneNumberSnackbar.show();
                 }
+            }
+        });
+
+        mAddGroupImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent startAddGroupIntent = new Intent(view.getContext(), PickContactForGroupActivity.class);
+                startActivityForResult(startAddGroupIntent, Constants.REQUEST_CODE_SELECT_GROUP);
             }
         });
     }
@@ -265,6 +287,16 @@ public class EditContactActivity extends AppCompatActivity {
             Bitmap imageBitmap = ImageUtils.getBitmapFromPath(this, mContactImageButton, mContact.getPhotoPath());
             mContactImageButton.setImageBitmap(imageBitmap);
         }
+        if (requestCode == Constants.REQUEST_CODE_SELECT_GROUP){
+            //TODO: implement this
+            if(data != null) {
+                if (data.hasExtra(Constants.SELECTED_GROUP_ID)) {
+                    long id = data.getLongExtra(Constants.SELECTED_GROUP_ID, 0);
+                    mGroup = mGroupsBox.get(id);
+                    mGroupTextView.setText(mGroup.getGroupName());
+                }
+            }
+        }
     }
 
     /**
@@ -274,6 +306,10 @@ public class EditContactActivity extends AppCompatActivity {
     private boolean saveContact() {
         readContactInfoFromFields();
         if(validateFields()) {
+            if(mGroup != null) {
+                mGroup.contactsRelation.add(mContact);
+                mGroupsBox.put(mGroup);
+            }
             mContactsBox.put(mContact);
             successSnackbar.show();
             return true;
@@ -365,6 +401,8 @@ public class EditContactActivity extends AppCompatActivity {
         mDeleteButton.setVisibility(View.INVISIBLE);
         mCallButton.setVisibility(View.VISIBLE);
         mSMSButton.setVisibility(View.VISIBLE);
+        mAddGroupImageButton.setEnabled(false);
+        mAddGroupImageButton.setVisibility(View.INVISIBLE);
         hideDeleteButton();
     }
 
@@ -380,8 +418,10 @@ public class EditContactActivity extends AppCompatActivity {
         mContactPhoneNumber1.setEnabled(true);
         mContactPhoneNumber2.setEnabled(true);
         mContactPhoneNumber3.setEnabled(true);
+        mAddGroupImageButton.setEnabled(true);
         mCallButton.setVisibility(View.INVISIBLE);
         mSMSButton.setVisibility(View.INVISIBLE);
+        mAddGroupImageButton.setVisibility(View.VISIBLE);
 
         showDeleteButton();
         isInEditMode = true;
