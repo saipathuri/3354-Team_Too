@@ -29,7 +29,7 @@ public class PickContactForGroupActivity extends AppCompatActivity implements Gr
 
         mGroupsBox = ((ContactsApp) getApplication()).getBoxStore().boxFor(Group.class);
         mGroups = new ArrayList(mGroupsBox.getAll());
-        mAdapter = new GroupsListAdapter(mGroups, Constants.GROUPS_ONCLICK_SELECT_GROUP, this);
+        mAdapter = new GroupsListAdapter(mGroups, this, Constants.GROUPS_ONCLICK_SELECT_GROUP, this);
 
         mGroupsRecyclerView = findViewById(R.id.rv_pick_group_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

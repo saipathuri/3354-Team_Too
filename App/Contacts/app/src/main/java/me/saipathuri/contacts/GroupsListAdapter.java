@@ -1,5 +1,6 @@
 package me.saipathuri.contacts;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
@@ -25,16 +26,19 @@ public class GroupsListAdapter extends RecyclerView.Adapter {
     private static final String TAG = "GroupsListAdapter";
     private ArrayList<Group> groups;
     GroupsRecyclerViewListener mListener;
+    private Context context;
     int onClickBehavior;
 
-    GroupsListAdapter(ArrayList<Group> groups, int onClickBehavior) {
+    GroupsListAdapter(ArrayList<Group> groups, Context context, int onClickBehavior) {
         this.groups = groups;
+        this.context = context;
         this.onClickBehavior = onClickBehavior;
     }
 
-    GroupsListAdapter(ArrayList<Group> groups, int onClickBehavior, GroupsRecyclerViewListener listener) {
+    GroupsListAdapter(ArrayList<Group> groups, Context context, int onClickBehavior, GroupsRecyclerViewListener listener) {
         this.groups = groups;
         mListener = listener;
+        this.context = context;
         this.onClickBehavior = onClickBehavior;
     };
 
@@ -81,7 +85,10 @@ public class GroupsListAdapter extends RecyclerView.Adapter {
             ((GroupViewHolder) holder).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "TBD");
+                    long id = groups.get(position).getId();
+                    Intent intent = new Intent(context, ViewContactsInGroupActivity.class);
+                    intent.putExtra(Constants.VIEW_GROUP_ID_EXTRA, id);
+                    context.startActivity(intent);
                 }
             });
         }
