@@ -24,8 +24,6 @@ public class Contact {
     String emailAddress;
     String photoPath;
 
-    ToMany<Group> groupsRelation;
-
     public Contact(long id, String firstName, String lastName, String phoneNumber1, String phoneNumber2, String phoneNumber3, String emailAddress, String photoPath) {
         this.id = id;
         this.firstName = firstName;

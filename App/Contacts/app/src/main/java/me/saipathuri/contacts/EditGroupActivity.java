@@ -177,9 +177,6 @@ public class EditGroupActivity extends AppCompatActivity{
 
             for (Contact contactInGroup : contactsToAdd){
                 mGroup.contactsRelation.add(contactInGroup);
-
-                contactInGroup.groupsRelation.add(mGroup);
-                mContactsBox.put(contactInGroup);
             }
             mGroupsBox.put(mGroup);
 
