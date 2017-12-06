@@ -1,10 +1,8 @@
 package me.saipathuri.contacts;
 
-import java.util.ArrayList;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 import io.objectbox.relation.ToMany;
-import io.objectbox.relation.ToOne;
 
 /**
  * Created by haney on 12/2/2017.
