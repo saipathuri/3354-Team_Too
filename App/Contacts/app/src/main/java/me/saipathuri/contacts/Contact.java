@@ -101,4 +101,15 @@ public class Contact {
     public void setPhotoPath(String photoPath) {
         this.photoPath = photoPath;
     }
+
+    @Override
+    public int hashCode() {
+        return (int) id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Contact other = (Contact) obj;
+        return this.id == other.getId();
+    }
 }

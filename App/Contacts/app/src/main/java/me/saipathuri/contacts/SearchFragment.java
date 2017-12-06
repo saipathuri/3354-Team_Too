@@ -5,12 +5,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import io.objectbox.Box;
 import io.objectbox.query.Query;
 
@@ -28,7 +36,8 @@ public class SearchFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<Contact> mContacts;
     private Box<Contact> mContactsBox;
-    private Query<Contact> searchQuery;
+    private Query<Contact> searchQueryFirstName;
+    private EditText mSearchQueryEditText;
 
     public SearchFragment() {
         //Required empty public constructor
@@ -40,7 +49,6 @@ public class SearchFragment extends Fragment {
      *
      * @return A new instance of fragment SearchFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance() {
         SearchFragment fragment = new SearchFragment();
         return fragment;
@@ -55,25 +63,8 @@ public class SearchFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContactsBox = ((ContactsApp) getActivity().getApplication()).getBoxStore().boxFor(Contact.class);
-        searchQuery = mContactsBox.query().equal(Contact_.firstName, /*field from the user typing in */).build().find();
-        updateContacts(true);
+        mContacts = new ArrayList<Contact>();
 
-        if(mContacts.size() == 0){
-            Toast.makeText(getActivity(), "The search was unsuccessful!", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    /**
-     * This method retrieves uses the contactsQuery to retrieve all contacts in alphabetical order.
-     * It then assigns those contacts to mContacts, an ArrayList<Contact>
-     * @param search if false, then the adapter is notified. If true, the adapter is not notified because it is not created yet.
-     */
-    private void updateContacts(boolean search) {
-        mContacts = new ArrayList<>(searchQuery.find());
-        if(!search) {
-            mAdapter.updateContactsList(mContacts);
-        }
     }
 
     /**
@@ -85,6 +76,37 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_search, container, false);
+
+        mSearchQueryEditText = rootView.findViewById(R.id.et_search_terms);
+
+        mSearchQueryEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                return;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String queryTerm = charSequence.toString().trim();
+                if(queryTerm.length() > 0) {
+                    searchQueryFirstName = mContactsBox.query().equal(Contact_.firstName, queryTerm).build();
+                    Query searchQueryLastName = mContactsBox.query().equal(Contact_.lastName, queryTerm).build();
+                    List<Contact> firstNameMatches = searchQueryFirstName.find();
+                    List<Contact> lastNameMatches = searchQueryLastName.find();
+                    HashSet<Contact> matches = new HashSet<>();
+                    matches.addAll(firstNameMatches);
+                    matches.addAll(lastNameMatches);
+                    ArrayList<Contact> finalMatches = new ArrayList<>();
+                    finalMatches.addAll(matches);
+                    mAdapter.updateContactsList(finalMatches);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                return;
+            }
+        });
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_contacts_list);
         // use a linear layout manager
@@ -104,18 +126,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
-        updateContacts(false);
     }
-
-    /**
-     * Used to start the Search activity
-     */
-    private void startCreateSearch() {
-
-    }
-
-
-
 
 }
